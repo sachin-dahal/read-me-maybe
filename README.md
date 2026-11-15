@@ -13,7 +13,7 @@
   Install it. That's the setup. There is no step two.
 </p>
 
-![Editing a paragraph in place in ReadMeMaybe](media/screenshots/editing.png)
+![The same document in the Light and Dark themes](media/screenshots/hero-light-dark.png)
 
 ## The problem (a tragedy in six acts)
 
@@ -35,73 +35,70 @@ ReadMeMaybe opens **every** `.md` file as a clean, readable page, automatically.
 | **Read** | Nothing. It's already rendered. |
 | **Edit** | Press <kbd>⌘E</kbd> / <kbd>Ctrl+E</kbd>, click any block, type. <kbd>Esc</kbd> when done. It edits *right where it sits*. |
 | **Find** | <kbd>⌘F</kbd> / <kbd>Ctrl+F</kbd>. Matches light up, even inside collapsed `<details>`. |
-| **Copy** | Select and copy. Nothing pops open. Code blocks have a copy button too. |
-| **Change the vibe** | Click **Aa**: Auto, Light, Dark, Sepia, Ocean · Sans or Serif · text size · width. |
-| **Get around** | Outline drawer, heading anchors, and links that open other docs (even `other.md#some-heading`). |
-| **Focus** | Collapse the toolbar with **⌃**. It stays out of your way until you want it. |
-| **See the raw text** | **⋯ → Open as plain text**. Same tab, no split. **Open in ReadMeMaybe** brings you back. |
+| **Copy** | Select and copy. Nothing pops open. Code blocks have their own copy button. |
+| **Change the look** | Click **Aa**: Auto, Light, Dark, Sepia or Ocean, sans or serif, text size and width. |
+| **Get around** | Outline panel, heading anchors, and links that open other docs (even `other.md#some-heading`). |
+| **Focus** | Hide the toolbar with **⌃**. It comes back when you want it. |
+| **See the raw text** | Click **Open as plain text** in the toolbar. Same tab, no split. **Open in ReadMeMaybe** brings you back. |
 
-## What's in the box
-
-- **Rendering that doesn't look like 2009.** GitHub-flavored tables, clickable task lists (they save to the file!), GitHub alerts (`> [!TIP]`), footnotes, emoji `:tada:`, front matter, syntax highlighting, raw HTML, and images relative to your file.
-- **Mermaid, built in.** Flowcharts, sequence diagrams, pie charts, state machines, and friends, themed to match your reading theme and loaded only when a doc actually has one. Broken diagram? You get a friendly error card, not a mysterious blank box.
-- **Editing without the ceremony.** A tiny format bar, <kbd>⌘B</kbd> / <kbd>⌘I</kbd> / <kbd>⌘K</kbd>, <kbd>Tab</kbd> to indent, and <kbd>Enter</kbd> continues your lists. Changes go straight into the real document, so the dirty dot, undo, <kbd>⌘S</kbd> and git all behave exactly like you'd expect.
-- **Live updates.** When something else changes the file (a `git pull`, another editor, your AI agent scribbling an implementation plan), the page updates in place. Unchanged parts don't even flicker.
+## A closer look
 
 <table>
   <tr>
-    <td><img src="media/screenshots/themes.png" alt="Sepia theme with serif font and the appearance panel"></td>
-    <td><img src="media/screenshots/mermaid.png" alt="Mermaid diagrams on the Ocean theme"></td>
+    <td width="50%" valign="top">
+      <img src="media/screenshots/dark-editing.png" alt="Editing a paragraph in place">
+      <p><b>Edit in place.</b> Click a block and it turns into Markdown right where it is, with a small format bar.</p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="media/screenshots/dark-diagrams.png" alt="A Mermaid flowchart, task list and code block">
+      <p><b>Diagrams, tasks and code.</b> Mermaid is built in, checkboxes save to the file, and code is highlighted.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="media/screenshots/dark-search-outline.png" alt="Search results and the outline panel">
+      <p><b>Find and outline.</b> Search the rendered page and jump between sections.</p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="media/screenshots/dark-appearance.png" alt="The appearance panel">
+      <p><b>Make it yours.</b> Five themes, two fonts, and adjustable size and width.</p>
+    </td>
   </tr>
 </table>
 
+## What's in the box
+
+- **The Markdown you actually use.** GitHub tables, task lists, alerts like `> [!TIP]`, footnotes, emoji, front matter, syntax highlighting, HTML, and images relative to your file.
+- **Mermaid diagrams.** Flowcharts, sequence diagrams, pie charts and more, matched to your theme. A broken diagram shows Mermaid's error message instead of an empty box.
+- **Edits that are real edits.** Changes go straight into the file, so the unsaved dot, undo, <kbd>⌘S</kbd> and git work as usual. There's <kbd>⌘B</kbd> / <kbd>⌘I</kbd> / <kbd>⌘K</kbd>, <kbd>Tab</kbd> to indent, and <kbd>Enter</kbd> continues a list.
+- **Live updates.** If the file changes elsewhere (git, another editor, an AI agent writing a plan), the page refreshes in place.
+
 ## Settings
 
-Everything is also one click away in the **Aa** menu.
+All of these are also in the **Aa** panel.
 
 | Setting | Default | What it does |
 | --- | --- | --- |
 | `readMeMaybe.theme` | `auto` | `auto` follows your editor theme, or pick `light`, `dark`, `sepia`, `ocean` |
-| `readMeMaybe.fontFamily` | `sans` | `sans` or `serif` for reading |
+| `readMeMaybe.fontFamily` | `sans` | `sans` or `serif` |
 | `readMeMaybe.fontSize` | `16` | Base text size in px (12–26) |
 | `readMeMaybe.contentWidth` | `normal` | `narrow`, `normal`, `wide` or `full` |
 | `readMeMaybe.startInEditMode` | `false` | Open files ready to edit |
 
-## FAQ (Frequently Anticipated Quibbles)
+## FAQ
 
-**I need the plain text editor for one file.**
-**⋯ → Open as plain text**, or right-click the tab → *Reopen Editor With…* → *Text Editor*.
-
-**I want plain text for *all* Markdown files.**
-Run **ReadMeMaybe: Toggle Auto-Open for Markdown Files**. Run it again when you miss me. I'll be by the phone. 📞
+**Can I get the plain text editor back?**
+For one file, click **Open as plain text** in the toolbar. For all Markdown files, run **ReadMeMaybe: Toggle Auto-Open for Markdown Files**, and run it again whenever you want ReadMeMaybe back.
 
 **What about git diffs?**
-Diffs stay regular side-by-side text diffs. ReadMeMaybe only takes over when you open a file.
+They stay normal side-by-side text diffs.
 
 **Does it work in Antigravity?**
-Yes. It's tested in VS Code 1.146 and Antigravity IDE 1.107. Install it from Open VSX or from the `.vsix`.
+Yes. It's tested in VS Code 1.146 and Antigravity IDE 1.107, and installs from Open VSX.
 
-**Can a sketchy Markdown file run scripts?**
-No. The preview runs under a strict Content Security Policy and all HTML is sanitized. Links only open when you click them.
-
-## Try it
-
-Open [`examples/kitchen-sink.md`](examples/kitchen-sink.md). It throws everything at the renderer and comes with a checklist to tick off as you go.
-
-## Development
-
-```bash
-npm install
-npm run dev               # browser harness at http://localhost:5179 (fake VS Code host)
-npm test                  # unit tests
-npm run test:integration  # runs the extension inside a real VS Code instance
-npm run package           # builds read-me-maybe-<version>.vsix
-```
-
-Press <kbd>F5</kbd> in VS Code to launch an Extension Development Host with the examples folder open.
-
-Before publishing, set your own `publisher` (and ideally `repository`) in `package.json`. With a repository set, you can drop `--no-rewrite-relative-links` from the `package` script so the screenshots resolve on the Marketplace.
+**Is it safe to open files I didn't write?**
+Yes. Scripts in Markdown never run, HTML is sanitized, and links only open when you click them.
 
 ## License
 
-[MIT](LICENSE). Call me, maybe. ✨
+[MIT](LICENSE)
