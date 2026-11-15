@@ -24,7 +24,7 @@
     "antigravity"
   ],
   "galleryBanner": {
-    "color": "#1b1726",
+    "color": "#2d2a3a",
     "theme": "dark"
   },
   "main": "./dist/extension.js",
