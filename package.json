@@ -217,7 +217,8 @@
     "dev": "node esbuild.mjs && node dev/serve.mjs",
     "vscode:prepublish": "npm run typecheck && node esbuild.mjs --production",
     "package": "vsce package --no-dependencies --allow-missing-repository --no-rewrite-relative-links",
-    "test:integration": "node esbuild.mjs && node test/integration/run.mjs"
+    "test:integration": "node esbuild.mjs && node test/integration/run.mjs",
+    "check:publish": "node scripts/check-publish.mjs"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.2.0",
@@ -234,6 +235,7 @@
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-front-matter": "^0.2.4",
     "mermaid": "^12.3.0",
+    "ovsx": "^1.4.0",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"
   }

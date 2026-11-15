@@ -1,0 +1,43 @@
+# Publishes ReadMeMaybe when you push a version tag (e.g. `npm version minor && git push --follow-tags`).
+#
+# VS Code Marketplace: uses Trusted Publishing (OIDC), so no token is stored here.
+#   Set it up once on https://marketplace.visualstudio.com/manage → your publisher → Trusted Publishing,
+#   pointing at this repository and this workflow file.
+# Open VSX (Antigravity, Cursor, VSCodium): add a repository secret named OVSX_PAT with your
+#   open-vsx.org access token. The step is skipped while the secret is missing.
+
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # required for Marketplace Trusted Publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run check:publish
+      - run: npm run package
+
+      - name: Publish to the VS Code Marketplace
+        run: npx vsce publish --oidc --packagePath *.vsix
+
+      - name: Publish to Open VSX
+        if: env.OVSX_PAT != ''
+        run: npx ovsx publish *.vsix -p "$OVSX_PAT" --skip-duplicate
