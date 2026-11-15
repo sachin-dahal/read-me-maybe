@@ -447,12 +447,18 @@ body.is-toolbar-collapsed .rmm-reveal:hover {
   opacity: 0;
   pointer-events: none;
   transform: translateY(-6px);
-  transition: opacity 0.15s ease, transform 0.15s ease, top 0.2s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease, top 0.2s ease, right 0.22s ease;
 }
 
 body.is-toolbar-collapsed .rmm-search {
   top: 8px;
   right: 48px;
+}
+
+/* Keep the search box clear of an open outline drawer. */
+body.has-outline .rmm-search {
+  right: calc(min(280px, 85vw) + 14px);
+  width: min(440px, calc(100vw - min(280px, 85vw) - 28px));
 }
 
 .rmm-search.is-open {
