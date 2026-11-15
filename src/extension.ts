@@ -50,6 +50,10 @@ export function activate(context: vscode.ExtensionContext): void {
     await closeTabs(viewColumn, (input) => input instanceof vscode.TabInputText && sameUri(input.uri, uri));
   });
 
+  if (context.extensionMode === vscode.ExtensionMode.Test) {
+    register('readMeMaybe._test', (action: string, payload?: unknown) => provider.testHook(action, payload));
+  }
+
   register('readMeMaybe.toggleAutoOpen', async () => {
     const workbench = vscode.workspace.getConfiguration('workbench');
     const current = { ...(workbench.inspect<Record<string, string>>('editorAssociations')?.globalValue ?? {}) };

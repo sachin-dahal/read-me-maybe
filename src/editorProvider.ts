@@ -71,6 +71,22 @@ export class ReadMeMaybeEditorProvider implements vscode.CustomTextEditorProvide
     });
   }
 
+  /** Introspection for the integration tests (only registered in test mode). */
+  async testHook(action: string, payload?: unknown): Promise<unknown> {
+    if (action === 'state') {
+      return [...this.sessions].map((s) => ({
+        uri: s.document.uri.toString(),
+        ready: s.isReady,
+        active: s === this.activeSession,
+      }));
+    }
+    if (action === 'message' && this.activeSession) {
+      await this.activeSession.receive(payload as WebviewMessage);
+      return true;
+    }
+    return undefined;
+  }
+
   get toolbarCollapsed(): boolean {
     return this.context.globalState.get<boolean>(TOOLBAR_COLLAPSED_KEY, false);
   }
@@ -92,6 +108,7 @@ export class PreviewSession implements vscode.Disposable {
   private selfEditDepth = 0;
   private externalChangePending = false;
   private updateTimer: ReturnType<typeof setTimeout> | undefined;
+  private ready = false;
 
   constructor(
     readonly document: vscode.TextDocument,
@@ -115,6 +132,16 @@ export class PreviewSession implements vscode.Disposable {
 
   post(message: HostMessage): void {
     void this.panel.webview.postMessage(message);
+  }
+
+  get isReady(): boolean {
+    return this.ready;
+  }
+
+  /** Handle a message as if the webview sent it, and wait for queued edits. */
+  async receive(message: WebviewMessage): Promise<void> {
+    await this.onMessage(message);
+    await this.editQueue;
   }
 
   command(command: HostCommand): void {
@@ -144,6 +171,7 @@ export class PreviewSession implements vscode.Disposable {
   private async onMessage(message: WebviewMessage): Promise<void> {
     switch (message.type) {
       case 'ready':
+        this.ready = true;
         this.sendInit();
         break;
       case 'edit':
