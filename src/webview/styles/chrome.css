@@ -64,8 +64,7 @@
 .rmm-icon-btn:focus-visible,
 .rmm-btn:focus-visible,
 .rmm-seg-btn:focus-visible,
-.rmm-swatch-btn:focus-visible,
-.rmm-menu-item:focus-visible {
+.rmm-swatch-btn:focus-visible {
   outline: 2px solid var(--rmm-accent);
   outline-offset: 1px;
 }
@@ -254,10 +253,16 @@ body.is-toolbar-collapsed .rmm-reveal:hover {
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .rmm-mode .rmm-btn span {
     display: none;
   }
+  .rmm-toolbar-sep {
+    margin: 0 3px;
+  }
+}
+
+@media (max-width: 440px) {
   .rmm-toolbar-sep {
     display: none;
   }
@@ -289,41 +294,6 @@ body.is-toolbar-collapsed .rmm-reveal:hover {
 .rmm-popover.is-open {
   opacity: 1;
   transform: none;
-}
-
-.rmm-menu {
-  display: flex;
-  flex-direction: column;
-  min-width: 210px;
-}
-
-.rmm-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 7px;
-  color: var(--rmm-fg);
-  background: transparent;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.rmm-menu-item .codicon {
-  color: var(--rmm-muted);
-  font-size: 15px;
-}
-
-.rmm-menu-item:hover {
-  background: var(--rmm-surface-2);
-}
-
-.rmm-menu-sep {
-  height: 1px;
-  margin: 4px 6px;
-  background: var(--rmm-border);
 }
 
 .rmm-prefs {
@@ -692,4 +662,33 @@ svg.rmm-lightbox-content {
   position: fixed;
   top: 12px;
   right: 14px;
+}
+
+/* ------------------------------------------------------------------ tooltip */
+.rmm-tooltip {
+  position: fixed;
+  z-index: 70;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 5px 9px;
+  color: var(--rmm-bg);
+  background: var(--rmm-toast-bg);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  font: 500 11.5px/1.35 var(--rmm-font-ui);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.rmm-tooltip.is-above {
+  transform: translateY(3px);
+}
+
+.rmm-tooltip.is-visible {
+  opacity: 1;
+  transform: none;
 }

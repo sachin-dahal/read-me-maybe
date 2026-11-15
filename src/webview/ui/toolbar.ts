@@ -58,27 +58,13 @@ export class Toolbar {
     this.appearance = new AppearancePanel(actions);
     const appearanceBtn = button({
       icon: 'text-size',
-      title: 'Appearance: theme, font, size, width',
+      title: 'Appearance',
       onClick: () => this.appearance.popover.toggle(appearanceBtn),
     });
 
-    const more = new Popover(
-      h(
-        'div',
-        { class: 'rmm-menu', attrs: { role: 'menu' } },
-        menuItem('copy', 'Copy Markdown', () => actions.copyMarkdown()),
-        menuItem('go-to-file', 'Open as plain text', () => actions.openAsText()),
-        h('div', { class: 'rmm-menu-sep' }),
-        menuItem('settings-gear', 'ReadMeMaybe settings', () => actions.openSettings()),
-      ),
-      'rmm-popover-menu',
-    );
-    const moreBtn = button({ icon: 'ellipsis', title: 'More actions', onClick: () => more.toggle(moreBtn) });
-    more.el.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('.rmm-menu-item')) {
-        more.close();
-      }
-    });
+    const copyBtn = button({ icon: 'copy', title: 'Copy Markdown', onClick: () => actions.copyMarkdown() });
+    const textBtn = button({ icon: 'file-code', title: 'Open as plain text', onClick: () => actions.openAsText() });
+    const settingsBtn = button({ icon: 'settings-gear', title: 'Settings', onClick: () => actions.openSettings() });
 
     this.el = h(
       'header',
@@ -86,7 +72,7 @@ export class Toolbar {
       h(
         'div',
         { class: 'rmm-toolbar-left' },
-        h('span', { class: 'rmm-brand', title: 'ReadMeMaybe' }, icon('markdown')),
+        h('span', { class: 'rmm-brand', data: { tooltip: 'ReadMeMaybe' } }, icon('markdown')),
         this.fileEl,
         this.statsEl,
         this.badgeEl,
@@ -99,7 +85,11 @@ export class Toolbar {
         this.searchBtn,
         this.outlineBtn,
         appearanceBtn,
-        moreBtn,
+        h('span', { class: 'rmm-toolbar-sep' }),
+        copyBtn,
+        textBtn,
+        settingsBtn,
+        h('span', { class: 'rmm-toolbar-sep' }),
         button({ icon: 'chevron-up', title: 'Hide toolbar', class: 'rmm-collapse', onClick: () => actions.setCollapsed(true) }),
       ),
     );
@@ -114,7 +104,7 @@ export class Toolbar {
 
   setFile(name: string, readOnly: boolean): void {
     this.fileEl.textContent = name;
-    this.fileEl.title = name;
+    this.fileEl.dataset.tooltip = name;
     this.badgeEl.hidden = !readOnly;
     this.modeGroup.hidden = readOnly;
   }
@@ -143,15 +133,6 @@ export class Toolbar {
   }
 }
 
-function menuItem(iconName: string, label: string, onClick: () => void): HTMLElement {
-  return h(
-    'button',
-    { class: 'rmm-menu-item', attrs: { type: 'button', role: 'menuitem' }, on: { click: onClick } },
-    icon(iconName),
-    h('span', { text: label }),
-  );
-}
-
 class AppearancePanel {
   readonly popover: Popover;
   private readonly themeButtons: HTMLButtonElement[];
@@ -166,7 +147,6 @@ class AppearancePanel {
         'button',
         {
           class: 'rmm-swatch-btn',
-          title: `${theme.label} theme`,
           attrs: { type: 'button', 'aria-label': `${theme.label} theme` },
           data: { value: theme.id },
           on: { click: () => actions.setConfig('theme', theme.id) },

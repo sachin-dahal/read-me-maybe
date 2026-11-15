@@ -81,7 +81,7 @@ function codeCard(code: string, lang: string): string {
   return (
     `<div class="rmm-code" data-lang="${escapeHtml(lang)}">` +
     `<div class="rmm-code-header"><span class="rmm-code-lang">${escapeHtml(languageLabel(lang))}</span>` +
-    `<button class="rmm-icon-btn rmm-code-copy" type="button" title="Copy code" aria-label="Copy code"><i class="codicon codicon-copy"></i></button></div>` +
+    `<button class="rmm-icon-btn rmm-code-copy" type="button" data-tooltip="Copy code" aria-label="Copy code"><i class="codicon codicon-copy"></i></button></div>` +
     `<pre class="hljs"><code>${highlightCode(content, lang)}</code></pre></div>\n`
   );
 }

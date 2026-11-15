@@ -58,8 +58,8 @@ export function button(options: ButtonOptions): HTMLButtonElement {
     'button',
     {
       class: `${options.label ? 'rmm-btn' : 'rmm-icon-btn'}${options.class ? ` ${options.class}` : ''}`,
-      title: options.title,
       attrs: { type: 'button', 'aria-label': options.title },
+      data: { tooltip: options.title },
       on: { click: options.onClick },
     },
     options.icon ? icon(options.icon) : null,

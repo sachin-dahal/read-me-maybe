@@ -125,8 +125,8 @@ export class MermaidRenderer {
     el.classList.remove('is-loading', 'is-error');
     el.innerHTML =
       `<div class="rmm-mermaid-actions">` +
-      `<button class="rmm-icon-btn" type="button" data-action="mermaid-zoom" title="View larger" aria-label="View larger"><i class="codicon codicon-screen-full"></i></button>` +
-      `<button class="rmm-icon-btn" type="button" data-action="mermaid-copy" title="Copy diagram source" aria-label="Copy diagram source"><i class="codicon codicon-copy"></i></button>` +
+      `<button class="rmm-icon-btn" type="button" data-action="mermaid-zoom" data-tooltip="View larger" aria-label="View larger"><i class="codicon codicon-screen-full"></i></button>` +
+      `<button class="rmm-icon-btn" type="button" data-action="mermaid-copy" data-tooltip="Copy diagram source" aria-label="Copy diagram source"><i class="codicon codicon-copy"></i></button>` +
       `</div><div class="rmm-mermaid-svg">${svg}</div>`;
     el.dataset.state = 'done';
     el.dataset.theme = themeKey;

@@ -13,6 +13,7 @@ import { Outline } from './ui/outline';
 import { Popover } from './ui/popover';
 import { Search } from './ui/search';
 import { toast } from './ui/toast';
+import { installTooltips } from './ui/tooltip';
 import { Toolbar, type Mode, type ToolbarActions } from './ui/toolbar';
 
 // Categorical colors for pie charts and other multi-series diagrams.
@@ -85,6 +86,7 @@ class App implements ToolbarActions, ContentHooks, EditorHost {
       this.probe,
     );
 
+    installTooltips();
     window.addEventListener('message', (e: MessageEvent<HostMessage>) => this.onMessage(e.data));
     document.addEventListener('keydown', (e) => this.onKeyDown(e));
     document.addEventListener('mousedown', (e) => this.onPointerDown(e), true);
