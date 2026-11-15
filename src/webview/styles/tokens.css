@@ -1,0 +1,162 @@
+/* ------------------------------------------------------------------ fonts & shape */
+body {
+  --rmm-font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text', 'Segoe UI', Inter, Roboto,
+    'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --rmm-font-serif: 'Iowan Old Style', Charter, 'Bitstream Charter', 'Palatino Linotype', Palatino, Georgia, serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --rmm-font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, 'Liberation Mono', monospace;
+  --rmm-font-ui: var(--vscode-font-family, var(--rmm-font-sans));
+  --rmm-font-body: var(--rmm-font-sans);
+  --rmm-font-size: 16px;
+  --rmm-width: 820px;
+  --rmm-toolbar-h: 40px;
+
+  /* GitHub alert colors (light) */
+  --rmm-alert-note: #0969da;
+  --rmm-alert-tip: #1a7f37;
+  --rmm-alert-important: #8250df;
+  --rmm-alert-warning: #9a6700;
+  --rmm-alert-caution: #cf222e;
+}
+
+body[data-font='serif'] {
+  --rmm-font-body: var(--rmm-font-serif);
+}
+
+body[data-width='narrow'] { --rmm-width: 680px; }
+body[data-width='normal'] { --rmm-width: 820px; }
+body[data-width='wide'] { --rmm-width: 1080px; }
+body[data-width='full'] { --rmm-width: 100%; }
+
+/* ------------------------------------------------------------------ themes */
+body[data-theme='light'] {
+  --rmm-bg: #ffffff;
+  --rmm-fg: #1f2328;
+  --rmm-heading: #0f1215;
+  --rmm-muted: #636c76;
+  --rmm-border: #e4e7eb;
+  --rmm-border-strong: #d0d7de;
+  --rmm-surface: #f6f8fa;
+  --rmm-surface-2: #eef1f4;
+  --rmm-elevated: #ffffff;
+  --rmm-accent: #6d4aff;
+  --rmm-accent-fg: #ffffff;
+  --rmm-link: #5a3dd8;
+  --rmm-code-bg: #f7f8fa;
+  --rmm-inline-code-bg: rgba(110, 118, 129, 0.13);
+  --rmm-mark: rgba(255, 199, 0, 0.38);
+  --rmm-mark-current: rgba(255, 140, 0, 0.75);
+  --rmm-selection: rgba(109, 74, 255, 0.2);
+  --rmm-shadow: 0 12px 32px rgba(17, 24, 39, 0.12), 0 2px 6px rgba(17, 24, 39, 0.06);
+}
+
+body[data-theme='dark'] {
+  --rmm-bg: #16171d;
+  --rmm-fg: #e3e4e8;
+  --rmm-heading: #f6f6f8;
+  --rmm-muted: #9a9eab;
+  --rmm-border: #2a2c36;
+  --rmm-border-strong: #393c48;
+  --rmm-surface: #1d1f27;
+  --rmm-surface-2: #262833;
+  --rmm-elevated: #1f2129;
+  --rmm-accent: #9d8bff;
+  --rmm-accent-fg: #15131f;
+  --rmm-link: #ab9cff;
+  --rmm-code-bg: #1b1d25;
+  --rmm-inline-code-bg: rgba(150, 156, 180, 0.16);
+  --rmm-mark: rgba(255, 210, 0, 0.3);
+  --rmm-mark-current: rgba(255, 150, 0, 0.7);
+  --rmm-selection: rgba(157, 139, 255, 0.28);
+  --rmm-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme='sepia'] {
+  --rmm-bg: #f8f1e3;
+  --rmm-fg: #433428;
+  --rmm-heading: #2d2219;
+  --rmm-muted: #7f6c5c;
+  --rmm-border: #e7dbc4;
+  --rmm-border-strong: #dccdb1;
+  --rmm-surface: #f0e6d3;
+  --rmm-surface-2: #e9ddc6;
+  --rmm-elevated: #fbf6ec;
+  --rmm-accent: #c0612b;
+  --rmm-accent-fg: #fffaf2;
+  --rmm-link: #a34f1d;
+  --rmm-code-bg: #f2e9d8;
+  --rmm-inline-code-bg: rgba(140, 105, 70, 0.14);
+  --rmm-mark: rgba(255, 190, 40, 0.42);
+  --rmm-mark-current: rgba(230, 120, 20, 0.7);
+  --rmm-selection: rgba(192, 97, 43, 0.2);
+  --rmm-shadow: 0 12px 32px rgba(80, 55, 30, 0.16), 0 2px 6px rgba(80, 55, 30, 0.08);
+}
+
+body[data-theme='ocean'] {
+  --rmm-bg: #0d1b2a;
+  --rmm-fg: #d5e1ee;
+  --rmm-heading: #eef5fc;
+  --rmm-muted: #8aa2bb;
+  --rmm-border: #1d3148;
+  --rmm-border-strong: #284262;
+  --rmm-surface: #12263b;
+  --rmm-surface-2: #183049;
+  --rmm-elevated: #112437;
+  --rmm-accent: #3fd0c4;
+  --rmm-accent-fg: #06201e;
+  --rmm-link: #6cc7ff;
+  --rmm-code-bg: #0f2235;
+  --rmm-inline-code-bg: rgba(108, 199, 255, 0.12);
+  --rmm-mark: rgba(255, 214, 90, 0.3);
+  --rmm-mark-current: rgba(255, 166, 60, 0.7);
+  --rmm-selection: rgba(63, 208, 196, 0.25);
+  --rmm-shadow: 0 14px 36px rgba(0, 6, 14, 0.5), 0 2px 6px rgba(0, 6, 14, 0.3);
+}
+
+/* Auto: borrow everything from the current VS Code / Antigravity theme. */
+body[data-theme='auto'] {
+  --rmm-bg: var(--vscode-editor-background);
+  --rmm-fg: var(--vscode-editor-foreground);
+  --rmm-heading: var(--vscode-editor-foreground);
+  --rmm-muted: var(--vscode-descriptionForeground);
+  --rmm-border: color-mix(in srgb, var(--vscode-editor-foreground) 12%, var(--vscode-editor-background));
+  --rmm-border-strong: color-mix(in srgb, var(--vscode-editor-foreground) 20%, var(--vscode-editor-background));
+  --rmm-surface: color-mix(in srgb, var(--vscode-editor-foreground) 4.5%, var(--vscode-editor-background));
+  --rmm-surface-2: color-mix(in srgb, var(--vscode-editor-foreground) 9%, var(--vscode-editor-background));
+  --rmm-elevated: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  --rmm-accent: var(--vscode-button-background, var(--vscode-focusBorder));
+  --rmm-accent-fg: var(--vscode-button-foreground, #ffffff);
+  --rmm-link: var(--vscode-textLink-foreground);
+  --rmm-code-bg: color-mix(in srgb, var(--vscode-editor-foreground) 4%, var(--vscode-editor-background));
+  --rmm-inline-code-bg: color-mix(in srgb, var(--vscode-editor-foreground) 10%, transparent);
+  --rmm-mark: var(--vscode-editor-findMatchHighlightBackground, rgba(255, 199, 0, 0.35));
+  --rmm-mark-current: var(--vscode-editor-findMatchBackground, rgba(255, 140, 0, 0.7));
+  --rmm-selection: var(--vscode-editor-selectionBackground, rgba(80, 140, 255, 0.3));
+  --rmm-shadow: 0 12px 32px var(--vscode-widget-shadow, rgba(0, 0, 0, 0.25));
+}
+
+/* Dark schemes switch alert colors. */
+body[data-scheme='dark'] {
+  --rmm-alert-note: #4493f8;
+  --rmm-alert-tip: #3fb950;
+  --rmm-alert-important: #ab7df8;
+  --rmm-alert-warning: #d29922;
+  --rmm-alert-caution: #f85149;
+}
+
+/* ------------------------------------------------------------------ derived tokens */
+body {
+  --rmm-accent-soft: color-mix(in srgb, var(--rmm-accent) 13%, transparent);
+  --rmm-accent-softer: color-mix(in srgb, var(--rmm-accent) 7%, transparent);
+  --rmm-chrome-bg: color-mix(in srgb, var(--rmm-bg) 84%, transparent);
+  --rmm-edit-hover: color-mix(in srgb, var(--rmm-accent) 6%, transparent);
+  --rmm-edit-hover-border: color-mix(in srgb, var(--rmm-accent) 28%, transparent);
+  --rmm-toast-bg: color-mix(in srgb, var(--rmm-fg) 92%, var(--rmm-bg));
+
+  /* Mermaid palette, derived so every theme gets matching diagrams. */
+  --rmm-diagram-node: color-mix(in srgb, var(--rmm-accent) 12%, var(--rmm-bg));
+  --rmm-diagram-border: color-mix(in srgb, var(--rmm-accent) 55%, var(--rmm-bg));
+  --rmm-diagram-alt: color-mix(in srgb, var(--rmm-link) 10%, var(--rmm-bg));
+  --rmm-diagram-line: color-mix(in srgb, var(--rmm-fg) 55%, var(--rmm-bg));
+  --rmm-diagram-note: color-mix(in srgb, #f5c400 16%, var(--rmm-bg));
+}

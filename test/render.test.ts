@@ -120,3 +120,30 @@ describe('helpers', () => {
     expect(stats.minutes).toBe(1);
   });
 });
+
+describe('html containers', () => {
+  it('keeps <details> and its markdown body in one block', () => {
+    const source = '<details>\n<summary>Secret</summary>\n\nHidden **text**.\n\n</details>\n\nAfter\n';
+    const { blocks } = renderMarkdown(md, source);
+    expect(blocks.map((b) => [b.kind, b.start, b.end])).toEqual([
+      ['html', 0, 6],
+      ['paragraph', 7, 8],
+    ]);
+    expect(blocks[0].html).toContain('<strong>text</strong>');
+  });
+
+  it('keeps centered README headers together', () => {
+    const source = '<div align="center">\n\n# Title\n\n<img src="x.png">\n\n</div>\n';
+    const { blocks } = renderMarkdown(md, source);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].html).toMatch(/<div align="center">[\s\S]*<h1[\s\S]*<\/div>/);
+  });
+
+  it('counts html depth', async () => {
+    const { htmlDepthDelta } = await import('../src/webview/render/markdown');
+    expect(htmlDepthDelta('<details>\n<summary>Hi</summary>')).toBe(1);
+    expect(htmlDepthDelta('<p align="center"><img src="a.png"><br/></p>')).toBe(0);
+    expect(htmlDepthDelta('<!-- <div> -->')).toBe(0);
+    expect(htmlDepthDelta('</div>')).toBe(-1);
+  });
+});

@@ -1,0 +1,221 @@
+/* ------------------------------------------------------------------ inline code */
+.rmm-content :not(pre) > code {
+  padding: 0.16em 0.42em;
+  font-family: var(--rmm-font-mono);
+  font-size: 0.86em;
+  color: inherit;
+  background: var(--rmm-inline-code-bg);
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ code cards */
+.rmm-code {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--rmm-border);
+  border-radius: 12px;
+  background: var(--rmm-code-bg);
+}
+
+.rmm-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 6px 0 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--rmm-border) 70%, transparent);
+  color: var(--rmm-muted);
+  font: 500 11.5px/1 var(--rmm-font-ui);
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+.rmm-code-copy {
+  opacity: 0.55;
+}
+
+.rmm-code:hover .rmm-code-copy,
+.rmm-code-copy:focus-visible,
+.rmm-code-copy.is-done {
+  opacity: 1;
+}
+
+.rmm-code-copy.is-done {
+  color: var(--rmm-alert-tip) !important;
+}
+
+.rmm-content pre {
+  margin: 0;
+  padding: 13px 16px 15px;
+  overflow-x: auto;
+  font-family: var(--rmm-font-mono);
+  font-size: 0.84em;
+  line-height: 1.62;
+  tab-size: 2;
+  color: var(--rmm-fg);
+  background: transparent;
+}
+
+.rmm-content pre code {
+  font: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
+  white-space: pre;
+}
+
+/* ------------------------------------------------------------------ syntax: light */
+body {
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-type: #953800;
+  --hl-attr: #0550ae;
+  --hl-tag: #116329;
+  --hl-meta: #6639ba;
+  --hl-add-fg: #116329;
+  --hl-add-bg: #dafbe1;
+  --hl-del-fg: #82071e;
+  --hl-del-bg: #ffebe9;
+}
+
+/* ------------------------------------------------------------------ syntax: dark */
+body[data-scheme='dark'] {
+  --hl-comment: #8b949e;
+  --hl-keyword: #ff7b72;
+  --hl-string: #a5d6ff;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+  --hl-type: #ffa657;
+  --hl-attr: #79c0ff;
+  --hl-tag: #7ee787;
+  --hl-meta: #d2a8ff;
+  --hl-add-fg: #aff5b4;
+  --hl-add-bg: rgba(46, 160, 67, 0.16);
+  --hl-del-fg: #ffdcd7;
+  --hl-del-bg: rgba(248, 81, 73, 0.16);
+}
+
+body[data-theme='sepia'] {
+  --hl-comment: #9b8875;
+  --hl-keyword: #a8432a;
+  --hl-string: #557423;
+  --hl-number: #8a5800;
+  --hl-title: #7a4e9c;
+  --hl-type: #9c5518;
+  --hl-attr: #2d6a86;
+  --hl-tag: #557423;
+  --hl-meta: #7a4e9c;
+  --hl-add-fg: #3f6212;
+  --hl-add-bg: rgba(101, 163, 13, 0.14);
+  --hl-del-fg: #9f1239;
+  --hl-del-bg: rgba(225, 29, 72, 0.1);
+}
+
+body[data-theme='ocean'] {
+  --hl-comment: #6b829b;
+  --hl-keyword: #81a1c1;
+  --hl-string: #a3be8c;
+  --hl-number: #b48ead;
+  --hl-title: #88c0d0;
+  --hl-type: #8fbcbb;
+  --hl-attr: #8fbcbb;
+  --hl-tag: #81a1c1;
+  --hl-meta: #5e9ad6;
+  --hl-add-fg: #a3be8c;
+  --hl-add-bg: rgba(163, 190, 140, 0.13);
+  --hl-del-fg: #e3a0a6;
+  --hl-del-bg: rgba(191, 97, 106, 0.16);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-doctag,
+.hljs-template-tag,
+.hljs-literal {
+  color: var(--hl-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-template-variable,
+.hljs-selector-attr,
+.hljs-char.escape_ {
+  color: var(--hl-string);
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-variable.constant_ {
+  color: var(--hl-number);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-section,
+.hljs-selector-id {
+  color: var(--hl-title);
+}
+
+.hljs-type,
+.hljs-title.class_,
+.hljs-built_in,
+.hljs-variable.language_,
+.hljs-params {
+  color: var(--hl-type);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-property,
+.hljs-selector-class,
+.hljs-selector-pseudo,
+.hljs-link {
+  color: var(--hl-attr);
+}
+
+.hljs-name,
+.hljs-tag {
+  color: var(--hl-tag);
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: var(--hl-meta);
+}
+
+.hljs-meta .hljs-string {
+  color: var(--hl-string);
+}
+
+.hljs-addition {
+  color: var(--hl-add-fg);
+  background: var(--hl-add-bg);
+  display: inline-block;
+  width: 100%;
+}
+
+.hljs-deletion {
+  color: var(--hl-del-fg);
+  background: var(--hl-del-bg);
+  display: inline-block;
+  width: 100%;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}

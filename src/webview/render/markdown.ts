@@ -1,5 +1,4 @@
-import MarkdownIt from 'markdown-it';
-import type Token from 'markdown-it/lib/token.mjs';
+import MarkdownItFactory, { type MarkdownIt, type Token } from 'markdown-it';
 import { full as emojiPlugin } from 'markdown-it-emoji';
 import footnotePlugin from 'markdown-it-footnote';
 import frontMatterPlugin from 'markdown-it-front-matter';
@@ -39,7 +38,7 @@ export interface RenderResult {
 }
 
 export function createMarkdown(): MarkdownIt {
-  const md = new MarkdownIt({ html: true, linkify: true, typographer: false, breaks: false });
+  const md = new MarkdownItFactory({ html: true, linkify: true, typographer: false, breaks: false });
   md.use(frontMatterPlugin, () => undefined);
   md.use(footnotePlugin);
   md.use(emojiPlugin);
@@ -117,13 +116,40 @@ function kindOf(token: Token): BlockKind {
   }
 }
 
+const VOID_TAGS = new Set([
+  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr',
+]);
+
+/**
+ * Net number of HTML elements an html_block leaves open, e.g. "<details>\n<summary>Hi</summary>" -> 1.
+ * Used to keep "<div align=center>\n\n# Title\n\n</div>" style constructs together.
+ */
+export function htmlDepthDelta(html: string): number {
+  let depth = 0;
+  const cleaned = html.replace(/<!--[\s\S]*?(?:-->|$)/g, '');
+  for (const match of cleaned.matchAll(/<(\/?)([a-zA-Z][\w-]*)\b[^>]*?(\/?)>/g)) {
+    const [, closing, name, selfClosing] = match;
+    if (VOID_TAGS.has(name.toLowerCase()) || selfClosing) {
+      continue;
+    }
+    depth += closing ? -1 : 1;
+  }
+  return depth;
+}
+
+interface TokenGroup {
+  tokens: Token[];
+  first: Token;
+}
+
 /** Split the token stream into top-level blocks, each mapped back to its source lines. */
 export function renderMarkdown(md: MarkdownIt, source: string): RenderResult {
   const env: RenderEnv = createEnv();
   const tokens = md.parse(source, env);
   const lines = source.split('\n');
-  const blocks: RenderedBlock[] = [];
 
+  // 1. Top-level token groups (an open token through its matching close).
+  const groups: TokenGroup[] = [];
   for (let i = 0; i < tokens.length; ) {
     let j = i;
     if (tokens[i].nesting === 1) {
@@ -135,22 +161,45 @@ export function renderMarkdown(md: MarkdownIt, source: string): RenderResult {
         }
       }
     }
-    const first = tokens[i];
-    const group = tokens.slice(i, j + 1);
-    const html = md.renderer.render(group, md.options, env);
+    groups.push({ tokens: tokens.slice(i, j + 1), first: tokens[i] });
+    i = j + 1;
+  }
+
+  // 2. Merge groups wrapped by an HTML element that spans several blocks,
+  //    otherwise the browser would close <details>/<div> too early.
+  const merged: TokenGroup[][] = [];
+  for (let i = 0; i < groups.length; i++) {
+    const run = [groups[i]];
+    let depth = groups[i].first.type === 'html_block' ? htmlDepthDelta(groups[i].first.content) : 0;
+    while (depth > 0 && i + 1 < groups.length && groups[i + 1].first.map) {
+      i++;
+      run.push(groups[i]);
+      if (groups[i].first.type === 'html_block') {
+        depth += htmlDepthDelta(groups[i].first.content);
+      }
+    }
+    merged.push(run);
+  }
+
+  // 3. Render each block.
+  const blocks: RenderedBlock[] = [];
+  for (const run of merged) {
+    const first = run[0].first;
+    const last = run[run.length - 1].first;
+    const html = md.renderer.render(run.flatMap((g) => g.tokens), md.options, env);
     let start = -1;
     let end = -1;
-    if (first.map) {
-      [start, end] = first.map;
+    if (first.map && last.map) {
+      start = first.map[0];
+      end = last.map[1];
       while (end > start + 1 && (lines[end - 1] ?? '').trim() === '') {
         end--;
       }
     }
     if (html.trim() !== '') {
-      const kind = kindOf(first);
+      const kind = run.length > 1 ? 'html' : kindOf(first);
       blocks.push({ start, end, kind, html, key: hashString(`${kind}:${html}`) });
     }
-    i = j + 1;
   }
 
   return { blocks, headings: env.headings };

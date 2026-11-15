@@ -1,0 +1,91 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: calc(var(--rmm-toolbar-h) + 16px);
+}
+
+html:has(body.is-toolbar-collapsed) {
+  scroll-padding-top: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--rmm-bg);
+  color: var(--rmm-fg);
+  font-family: var(--rmm-font-body);
+  font-size: var(--rmm-font-size);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--rmm-selection);
+}
+
+::highlight(rmm-search) {
+  background-color: var(--rmm-mark);
+  color: inherit;
+}
+
+::highlight(rmm-search-current) {
+  background-color: var(--rmm-mark-current);
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--rmm-fg) 20%, transparent);
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--rmm-fg) 34%, transparent);
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.rmm-page {
+  padding: 0 clamp(18px, 5vw, 56px) 120px;
+  transition: padding-right 0.22s ease;
+}
+
+@media (min-width: 1180px) {
+  body.has-outline .rmm-page {
+    padding-right: calc(280px + clamp(18px, 3vw, 40px));
+  }
+}
+
+.rmm-probe {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Read synchronously via getComputedStyle; a transition would return stale colors. */
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
