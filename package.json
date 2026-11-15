@@ -1,0 +1,238 @@
+{
+  "name": "read-me-maybe",
+  "displayName": "ReadMeMaybe",
+  "description": "Hey, I just met you, and this is crazy... but your Markdown opens beautifully now. Read, edit in place, search, theme, and Mermaid. Zero setup.",
+  "version": "0.1.0",
+  "publisher": "readmemaybe",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "preview",
+    "markdown preview",
+    "markdown editor",
+    "mermaid",
+    "readme",
+    "wysiwyg",
+    "antigravity"
+  ],
+  "galleryBanner": {
+    "color": "#1b1726",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "readMeMaybe.editor",
+        "displayName": "ReadMeMaybe",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          },
+          {
+            "filenamePattern": "*.markdown"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "readMeMaybe.openPreview",
+        "title": "Open in ReadMeMaybe",
+        "category": "ReadMeMaybe",
+        "icon": "$(book)"
+      },
+      {
+        "command": "readMeMaybe.openAsText",
+        "title": "Open as Plain Text",
+        "category": "ReadMeMaybe",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "readMeMaybe.toggleEditMode",
+        "title": "Toggle Edit Mode",
+        "category": "ReadMeMaybe",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "readMeMaybe.find",
+        "title": "Find in Document",
+        "category": "ReadMeMaybe"
+      },
+      {
+        "command": "readMeMaybe.copyMarkdown",
+        "title": "Copy Markdown Source",
+        "category": "ReadMeMaybe"
+      },
+      {
+        "command": "readMeMaybe.toggleAutoOpen",
+        "title": "Toggle Auto-Open for Markdown Files",
+        "category": "ReadMeMaybe"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "readMeMaybe.openPreview",
+          "when": "resourceLangId == markdown && activeEditor == 'workbench.editors.files.textFileEditor'",
+          "group": "navigation"
+        },
+        {
+          "command": "readMeMaybe.openAsText",
+          "when": "activeCustomEditorId == 'readMeMaybe.editor'",
+          "group": "1_readMeMaybe@1"
+        }
+      ],
+      "webview/context": [
+        {
+          "command": "readMeMaybe.copyMarkdown",
+          "when": "webviewId == 'readMeMaybe.editor'",
+          "group": "9_readMeMaybe@1"
+        },
+        {
+          "command": "readMeMaybe.toggleEditMode",
+          "when": "webviewId == 'readMeMaybe.editor'",
+          "group": "9_readMeMaybe@2"
+        },
+        {
+          "command": "readMeMaybe.openAsText",
+          "when": "webviewId == 'readMeMaybe.editor'",
+          "group": "9_readMeMaybe@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "readMeMaybe.openPreview",
+          "when": "resourceLangId == markdown"
+        },
+        {
+          "command": "readMeMaybe.openAsText",
+          "when": "activeCustomEditorId == 'readMeMaybe.editor'"
+        },
+        {
+          "command": "readMeMaybe.toggleEditMode",
+          "when": "activeCustomEditorId == 'readMeMaybe.editor'"
+        },
+        {
+          "command": "readMeMaybe.find",
+          "when": "activeCustomEditorId == 'readMeMaybe.editor'"
+        },
+        {
+          "command": "readMeMaybe.copyMarkdown",
+          "when": "activeCustomEditorId == 'readMeMaybe.editor'"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "readMeMaybe.find",
+        "key": "ctrl+f",
+        "mac": "cmd+f",
+        "when": "activeCustomEditorId == 'readMeMaybe.editor' && !inputFocus && !sideBarFocus && !panelFocus && !auxiliaryBarFocus"
+      },
+      {
+        "command": "readMeMaybe.toggleEditMode",
+        "key": "ctrl+e",
+        "mac": "cmd+e",
+        "when": "activeCustomEditorId == 'readMeMaybe.editor' && !inputFocus && !sideBarFocus && !panelFocus && !auxiliaryBarFocus"
+      }
+    ],
+    "configuration": {
+      "title": "ReadMeMaybe",
+      "properties": {
+        "readMeMaybe.theme": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "light",
+            "dark",
+            "sepia",
+            "ocean"
+          ],
+          "enumDescriptions": [
+            "Follow your current VS Code / Antigravity color theme.",
+            "Crisp and bright.",
+            "Easy on the eyes after midnight.",
+            "Warm paper vibes. Pairs well with coffee.",
+            "Deep blue with teal accents."
+          ],
+          "description": "Color theme for rendered Markdown."
+        },
+        "readMeMaybe.fontFamily": {
+          "type": "string",
+          "default": "sans",
+          "enum": [
+            "sans",
+            "serif"
+          ],
+          "description": "Reading font style."
+        },
+        "readMeMaybe.fontSize": {
+          "type": "number",
+          "default": 16,
+          "minimum": 12,
+          "maximum": 26,
+          "description": "Base font size (px) for rendered Markdown."
+        },
+        "readMeMaybe.contentWidth": {
+          "type": "string",
+          "default": "normal",
+          "enum": [
+            "narrow",
+            "normal",
+            "wide",
+            "full"
+          ],
+          "description": "Maximum width of the reading column."
+        },
+        "readMeMaybe.startInEditMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Open Markdown files in Edit mode instead of Read mode."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run",
+    "dev": "node esbuild.mjs && node dev/serve.mjs",
+    "vscode:prepublish": "npm run typecheck && node esbuild.mjs --production",
+    "package": "vsce package --no-dependencies --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^22.20.5",
+    "@types/vscode": "^1.90.0",
+    "@vscode/codicons": "^0.0.46-24",
+    "@vscode/vsce": "^4.1.1",
+    "dompurify": "^3.4.18",
+    "esbuild": "^0.28.2",
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^15.0.3",
+    "markdown-it-emoji": "^3.1.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-front-matter": "^0.2.4",
+    "mermaid": "^12.3.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
