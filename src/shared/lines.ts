@@ -16,20 +16,24 @@ export function lineCount(text: string): number {
   return text === '' ? 0 : text.split('\n').length;
 }
 
-/**
- * Replace lines [start, end) of `source` with `newText`.
- * Removing a block entirely also swallows one following blank separator line so
- * deleting paragraphs doesn't leave growing gaps behind.
- */
+/** Replace lines [start, end) of `source` with `newText` ("" removes the lines). */
 export function replaceLines(source: string, start: number, end: number, newText: string): string {
   const lines = source.split('\n');
-  const before = lines.slice(0, start);
-  let after = lines.slice(end);
   const middle = newText === '' ? [] : newText.split('\n');
-  if (middle.length === 0 && end > start && after.length > 1 && after[0].trim() === '') {
-    after = after.slice(1);
+  return [...lines.slice(0, start), ...middle, ...lines.slice(end)].join('\n');
+}
+
+/**
+ * After a block was emptied at `line`, return an edit that removes the now
+ * doubled blank line so deleted paragraphs don't leave growing gaps behind.
+ */
+export function collapseBlankLine(source: string, line: number): LineEdit | undefined {
+  const lines = source.split('\n');
+  const isBlank = (i: number) => i >= 0 && i < lines.length && lines[i].trim() === '';
+  if (isBlank(line) && (isBlank(line - 1) || line === 0) && line < lines.length - 1) {
+    return { start: line, end: line + 1, oldText: lines[line], newText: '' };
   }
-  return [...before, ...middle, ...after].join('\n');
+  return undefined;
 }
 
 /** Apply a LineEdit, or return undefined when the source no longer matches `oldText`. */

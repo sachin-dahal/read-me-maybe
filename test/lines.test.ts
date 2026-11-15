@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyLineEdit, minimalDiff, normalizeEol, prepareAppend, replaceLines } from '../src/shared/lines';
+import { applyLineEdit, collapseBlankLine, minimalDiff, normalizeEol, prepareAppend, replaceLines } from '../src/shared/lines';
 
 describe('replaceLines', () => {
   it('replaces a block in the middle', () => {
@@ -14,8 +14,14 @@ describe('replaceLines', () => {
     expect(replaceLines('a\n\nb', 2, 3, 'c')).toBe('a\n\nc');
   });
 
-  it('removes the separator when deleting a block', () => {
-    expect(replaceLines('a\n\nb\n\nc\n', 2, 3, '')).toBe('a\n\nc\n');
+  it('keeps separators while a block is emptied, then collapses them', () => {
+    const emptied = replaceLines('a\n\nb\n\nc\n', 2, 3, '');
+    expect(emptied).toBe('a\n\n\nc\n');
+    // Typing again lands in its own paragraph instead of merging into "c".
+    expect(replaceLines(emptied, 2, 2, 'x')).toBe('a\n\nx\n\nc\n');
+    const cleanup = collapseBlankLine(emptied, 2)!;
+    expect(applyLineEdit(emptied, cleanup)).toBe('a\n\nc\n');
+    expect(collapseBlankLine('a\n\nb', 1)).toBeUndefined();
   });
 });
 
