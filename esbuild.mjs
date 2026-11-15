@@ -1,6 +1,6 @@
 // Build script: bundles the extension host code and the webview app.
 import * as esbuild from 'esbuild';
-import { copyFile, mkdir } from 'node:fs/promises';
+import { copyFile, mkdir, rm } from 'node:fs/promises';
 
 const watch = process.argv.includes('--watch');
 const production = process.argv.includes('--production');
@@ -49,6 +49,9 @@ async function copyAssets() {
   ]);
 }
 
+if (production) {
+  await rm('dist', { recursive: true, force: true });
+}
 await copyAssets();
 
 if (watch) {
