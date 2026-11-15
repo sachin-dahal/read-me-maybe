@@ -19,7 +19,7 @@ export function readConfig(): ViewConfig {
     fontFamily: oneOf(cfg.get('fontFamily'), FONTS, 'sans'),
     fontSize: Number.isFinite(fontSize) ? Math.min(26, Math.max(12, Math.round(fontSize))) : 16,
     contentWidth: oneOf(cfg.get('contentWidth'), WIDTHS, 'normal'),
-    startInEditMode: cfg.get('startInEditMode', false) === true,
+    startInEditMode: cfg.get<boolean>('startInEditMode', false) === true,
   };
 }
 

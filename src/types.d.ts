@@ -1,18 +1,18 @@
 declare module 'markdown-it-footnote' {
-  import type MarkdownIt from 'markdown-it';
-  const plugin: MarkdownIt.PluginSimple;
+  import type { PluginSimple } from 'markdown-it';
+  const plugin: PluginSimple;
   export default plugin;
 }
 
 declare module 'markdown-it-emoji' {
-  import type MarkdownIt from 'markdown-it';
-  export const full: MarkdownIt.PluginWithOptions;
-  export const light: MarkdownIt.PluginWithOptions;
-  export const bare: MarkdownIt.PluginWithOptions;
+  import type { PluginWithOptions } from 'markdown-it';
+  export const full: PluginWithOptions;
+  export const light: PluginWithOptions;
+  export const bare: PluginWithOptions;
 }
 
 declare module 'markdown-it-front-matter' {
-  import type MarkdownIt from 'markdown-it';
-  const plugin: MarkdownIt.PluginWithOptions<(frontMatter: string) => void>;
+  import type { PluginWithOptions } from 'markdown-it';
+  const plugin: PluginWithOptions<(frontMatter: string) => void>;
   export default plugin;
 }

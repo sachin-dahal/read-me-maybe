@@ -1,6 +1,4 @@
-import type MarkdownIt from 'markdown-it';
-import type StateCore from 'markdown-it/lib/rules_core/state_core.mjs';
-import type Token from 'markdown-it/lib/token.mjs';
+import type { MarkdownIt, StateCore, Token } from 'markdown-it';
 import { Slugger } from './slug';
 import { escapeHtml } from './util';
 
@@ -12,6 +10,7 @@ export interface HeadingInfo {
 }
 
 export interface RenderEnv {
+  [key: string | symbol]: unknown;
   headings: HeadingInfo[];
   slugger: Slugger;
   /** Lines of top-level task list items, in document order. */
@@ -32,7 +31,7 @@ function inlineText(token: Token): string {
 /** Adds GitHub-style ids to headings and records them for the outline. */
 export function headingsPlugin(md: MarkdownIt): void {
   md.core.ruler.push('rmm_headings', (state: StateCore) => {
-    const env = state.env as RenderEnv;
+    const env = state.env as unknown as RenderEnv;
     const tokens = state.tokens;
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
@@ -47,9 +46,9 @@ export function headingsPlugin(md: MarkdownIt): void {
     }
   });
 
-  md.renderer.rules.heading_close = (tokens, idx) => {
+  md.renderer.rules.heading_close = (tokens: Token[], idx: number) => {
     const open = tokens[idx - 2];
-    const id = open?.attrGet('id');
+    const id = String(open?.attrGet('id') ?? '');
     const anchor = id
       ? `<a class="rmm-anchor" href="#${escapeHtml(id)}" aria-label="Link to this section" tabindex="-1">#</a>`
       : '';
@@ -62,7 +61,7 @@ const TASK_RE = /^\[([ xX])\][ \t]/;
 /** GitHub task lists: "- [ ] todo" / "- [x] done" become real (clickable) checkboxes. */
 export function taskListPlugin(md: MarkdownIt): void {
   md.core.ruler.after('inline', 'rmm_tasks', (state: StateCore) => {
-    const env = state.env as RenderEnv;
+    const env = state.env as unknown as RenderEnv;
     const tokens = state.tokens;
     for (let i = 2; i < tokens.length; i++) {
       const inline = tokens[i];
@@ -92,7 +91,7 @@ export function taskListPlugin(md: MarkdownIt): void {
       for (let j = i - 3; j >= 0; j--) {
         const t = tokens[j];
         if ((t.type === 'bullet_list_open' || t.type === 'ordered_list_open') && t.level === item.level - 1) {
-          if (!(t.attrGet('class') ?? '').includes('rmm-task-list')) {
+          if (!String(t.attrGet('class') ?? '').includes('rmm-task-list')) {
             t.attrJoin('class', 'rmm-task-list');
           }
           break;
