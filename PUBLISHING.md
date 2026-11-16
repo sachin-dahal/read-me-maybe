@@ -12,16 +12,8 @@ It lists what's ready and what still needs fixing.
 
 ## 1. One-time setup
 
-1. **Pick a publisher ID.** Sign in at [marketplace.visualstudio.com/manage](https://marketplace.visualstudio.com/manage) and click **Create publisher**. The ID is permanent, so choose carefully. Put it in `package.json` → `"publisher"` (right now it's the placeholder `readmemaybe`).
-2. **Push the repo to GitHub** and add it to `package.json`:
-
-   ```json
-   "repository": { "type": "git", "url": "https://github.com/<you>/read-me-maybe" },
-   "bugs": { "url": "https://github.com/<you>/read-me-maybe/issues" },
-   "homepage": "https://github.com/<you>/read-me-maybe#readme"
-   ```
-
-   The Marketplace needs this to show the README screenshots. Then remove `--no-rewrite-relative-links` and `--allow-missing-repository` from the `package` script.
+1. ✅ **Publisher:** `sachindahal`, created at [marketplace.visualstudio.com/manage](https://marketplace.visualstudio.com/manage) and set in `package.json`. The extension's full ID is `sachindahal.read-me-maybe`.
+2. ✅ **Repository:** [github.com/sachin-dahal/read-me-maybe](https://github.com/sachin-dahal/read-me-maybe), set as `repository`, `bugs` and `homepage` in `package.json`. vsce uses it to turn the README's relative image links into GitHub URLs, so screenshots show on the Marketplace once they're pushed to `main`.
 3. **Set up Open VSX.**
    1. Create an [Eclipse account](https://accounts.eclipse.org/user/register) using the same GitHub username you'll use on open-vsx.org.
    2. Sign in at [open-vsx.org](https://open-vsx.org) with GitHub. On your profile, click **Log in with Eclipse**, then sign the **Publisher Agreement**.

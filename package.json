@@ -3,7 +3,7 @@
   "displayName": "ReadMeMaybe",
   "description": "Hey, I just met you, and this is crazy... but your Markdown opens beautifully now. Read, edit in place, search, theme, and Mermaid. Zero setup.",
   "version": "0.1.0",
-  "publisher": "readmemaybe",
+  "publisher": "sachindahal",
   "license": "MIT",
   "icon": "media/icon.png",
   "engines": {
@@ -216,7 +216,7 @@
     "test": "vitest run",
     "dev": "node esbuild.mjs && node dev/serve.mjs",
     "vscode:prepublish": "npm run typecheck && node esbuild.mjs --production",
-    "package": "vsce package --no-dependencies --allow-missing-repository --no-rewrite-relative-links",
+    "package": "vsce package --no-dependencies",
     "test:integration": "node esbuild.mjs && node test/integration/run.mjs",
     "check:publish": "node scripts/check-publish.mjs"
   },
@@ -238,5 +238,13 @@
     "ovsx": "^1.4.0",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sachin-dahal/read-me-maybe"
+  },
+  "bugs": {
+    "url": "https://github.com/sachin-dahal/read-me-maybe/issues"
+  },
+  "homepage": "https://github.com/sachin-dahal/read-me-maybe#readme"
 }
