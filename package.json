@@ -1,7 +1,7 @@
 {
   "name": "read-me-maybe",
-  "displayName": "ReadMeMaybe",
-  "description": "Hey, I just met you, and this is crazy... but your Markdown opens beautifully now. Read, edit in place, search, theme, and Mermaid. Zero setup.",
+  "displayName": "ReadMeMaybe: Markdown Preview & Editor",
+  "description": "A beautiful Markdown preview and editor. Read, edit in place, search, switch themes, and render Mermaid diagrams. Zero setup.",
   "version": "0.1.0",
   "publisher": "sachindahal",
   "license": "MIT",
@@ -21,7 +21,15 @@
     "mermaid",
     "readme",
     "wysiwyg",
-    "antigravity"
+    "antigravity",
+    "markdown viewer",
+    "markdown reader",
+    "md",
+    "live preview",
+    "github markdown",
+    "diagrams",
+    "wysiwyg editor",
+    "readme preview"
   ],
   "galleryBanner": {
     "color": "#2d2a3a",
