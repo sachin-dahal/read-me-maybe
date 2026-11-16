@@ -104,6 +104,25 @@ async function run() {
       assert.equal(tabs.some((t) => t.input instanceof vscode.TabInputText && t.input.uri.toString() === sink.toString()), false);
     });
 
+    await check('toolbar "Copy Markdown" puts the text on the clipboard', async () => {
+      await sendFromWebviewSafe({ type: 'copy', text: '# Copied from the toolbar' });
+      assert.equal(await vscode.env.clipboard.readText(), '# Copied from the toolbar');
+    });
+
+    await check('toolbar "Open as plain text" swaps to the text editor', async () => {
+      await sendFromWebviewSafe({ type: 'openAsText' });
+      await waitFor(() => vscode.window.activeTextEditor?.document.uri.toString() === sink.toString(), 'text editor');
+      await vscode.commands.executeCommand('readMeMaybe.openPreview');
+      await waitFor(() => isOurs(activeTabInput(), sink), 'preview again');
+    });
+
+    await check('toolbar "Settings" opens the ReadMeMaybe settings', async () => {
+      await waitFor(async () => (await state()).some((s) => s.uri === sink.toString() && s.active), 'sink active');
+      await sendFromWebview({ type: 'openSettings' });
+      await waitFor(() => vscode.window.tabGroups.activeTabGroup.activeTab?.label === 'Settings', 'settings tab');
+      await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+    });
+
     await check('auto-open can be turned off and on again', async () => {
       await vscode.commands.executeCommand('readMeMaybe.toggleAutoOpen');
       const assoc = vscode.workspace.getConfiguration('workbench').get('editorAssociations');
