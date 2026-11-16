@@ -1,7 +1,7 @@
 {
   "name": "read-me-maybe",
-  "displayName": "ReadMeMaybe: Markdown Preview & Editor",
-  "description": "A beautiful Markdown preview and editor. Read, edit in place, search, switch themes, and render Mermaid diagrams. Zero setup.",
+  "displayName": "ReadMeMaybe",
+  "description": "An easy Markdown preview and editor. Opens .md files rendered, edit right in the page, with Mermaid, search and themes. Zero setup.",
   "version": "0.1.0",
   "publisher": "sachindahal",
   "license": "MIT",
