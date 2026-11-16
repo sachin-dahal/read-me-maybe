@@ -49,9 +49,28 @@ check(
 const repoUrl = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url;
 check(
   /^https:\/\//.test(repoUrl ?? ''),
-  '"repository" points to a public HTTPS git URL',
+  '"repository" is an HTTPS git URL',
   'Add "repository": { "type": "git", "url": "https://github.com/<you>/read-me-maybe" }. The Marketplace needs it to show README images.',
 );
+
+// vsce points README images at the GitHub repo, so it has to be publicly readable.
+const github = /github\.com\/([^/]+)\/([^/#?]+?)(?:\.git)?\/?$/.exec(repoUrl ?? '');
+if (github) {
+  const [, owner, repo] = github;
+  let status;
+  try {
+    status = (await fetch(`https://github.com/${owner}/${repo}`, { method: 'HEAD', signal: AbortSignal.timeout(8000) })).status;
+  } catch {
+    status = undefined; // offline: can't tell
+  }
+  if (status !== undefined) {
+    check(
+      status < 400,
+      `github.com/${owner}/${repo} is public`,
+      'The repository is private (or missing), so README screenshots and repo/support links will be broken on the Marketplace. Make it public: GitHub → Settings → General → Danger Zone → Change visibility.',
+    );
+  }
+}
 
 const packageScript = pkg.scripts?.package ?? '';
 check(
