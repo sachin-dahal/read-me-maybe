@@ -5,10 +5,14 @@
 //   ?file=examples/another-file.md   -> pick a document
 //   ?theme=sepia&mode=edit           -> start with a theme / mode
 //   ?scheme=light                    -> simulate a light VS Code theme for "auto"
+//
+// The fake host acts out VS Code-only actions the closest way a browser can:
+// copy uses the clipboard, "Open as plain text" opens the raw file in a new tab,
+// links to other .md files navigate, and Settings shows a short explanation.
 
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 
 const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const PORT = Number(process.env.PORT ?? 5179);
@@ -58,6 +62,7 @@ function page(file, text, query) {
     startInEditMode: query.get('mode') === 'edit',
   };
   const dir = file.split('/').slice(0, -1).join('/');
+  const fragment = query.get('fragment');
   return `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8">
@@ -74,7 +79,40 @@ function page(file, text, query) {
 (() => {
   let text = ${JSON.stringify(text).replace(/</g, '\\u003c')};
   let config = ${JSON.stringify(config)};
+  const FILE = ${JSON.stringify(file)};
   const log = [];
+  let noteTimer;
+  const note = (message) => {
+    let el = document.getElementById('dev-note');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'dev-note';
+      el.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:99;max-width:380px;padding:9px 12px;border-radius:8px;' +
+        'background:#1d1b26;color:#f4f2fb;font:12px/1.45 system-ui,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.3)';
+      document.body.append(el);
+    }
+    el.textContent = '[dev harness] ' + message;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => el.remove(), 5000);
+  };
+  const rawUrl = (path) => '/raw?file=' + encodeURIComponent(path);
+  const openLink = (href) => {
+    if (/^(https?|mailto):/i.test(href)) {
+      window.open(href, '_blank', 'noopener');
+      return;
+    }
+    const [pathPart, hash = ''] = href.split('#');
+    const target = decodeURIComponent(new URL(pathPart, 'http://x/' + FILE).pathname.slice(1));
+    if (/\\.(md|markdown)$/i.test(target)) {
+      const next = new URLSearchParams(location.search);
+      next.set('file', target);
+      hash ? next.set('fragment', hash) : next.delete('fragment');
+      location.search = next.toString();
+    } else {
+      window.open(rawUrl(target), '_blank', 'noopener');
+      note('In VS Code this opens ' + target + (hash ? ' at ' + hash : '') + ' in the editor.');
+    }
+  };
   const send = (message) => window.postMessage(message, '*');
   const replaceLines = (source, start, end, next) => {
     const lines = source.split('\\n');
@@ -96,6 +134,7 @@ function page(file, text, query) {
             type: 'init', text, fileName: ${JSON.stringify(file.split('/').pop())},
             baseUri: location.origin + '/${dir}', rootUri: location.origin,
             readOnly: ${query.get('readonly') === '1'}, config, toolbarCollapsed: ${query.get('collapsed') === '1'},
+            fragment: ${JSON.stringify(fragment ?? undefined) ?? 'undefined'},
           }));
           break;
         case 'edit': {
@@ -112,6 +151,24 @@ function page(file, text, query) {
           config = { ...config, [message.key]: message.value };
           setTimeout(() => send({ type: 'config', config }), 30);
           break;
+        case 'copy':
+          // Runs inside the click, so the browser allows clipboard access.
+          navigator.clipboard?.writeText(message.text).catch(() =>
+            note('The browser blocked clipboard access. In VS Code this always works.'));
+          break;
+        case 'openAsText':
+          window.open(rawUrl(FILE), '_blank', 'noopener');
+          note('Opened the raw Markdown in a new tab. In VS Code this swaps to the text editor in the same tab.');
+          break;
+        case 'openSettings':
+          note('In VS Code this opens Settings filtered to "readMeMaybe". Here, use the Aa panel or URL params like ?theme=sepia&font=serif&size=18&width=wide.');
+          break;
+        case 'openLink':
+          openLink(message.href);
+          break;
+        case 'save':
+          note('Edits here live in memory only. In VS Code, ⌘S writes the file.');
+          break;
         default:
           console.log('[host]', message);
       }
@@ -125,14 +182,29 @@ function page(file, text, query) {
 </body></html>`;
 }
 
+/** Resolve a repo-relative path, refusing anything outside the project or inside .git. */
+function projectPath(rel) {
+  const full = resolve(ROOT, normalize(rel));
+  if (!full.startsWith(ROOT + sep) || full.split(sep).includes('.git')) {
+    throw new Error(`Refusing to serve ${rel}`);
+  }
+  return full;
+}
+
 createServer(async (req, res) => {
   try {
     const url = new URL(req.url ?? '/', `http://localhost:${PORT}`);
     if (url.pathname === '/') {
       const file = url.searchParams.get('file') ?? 'examples/kitchen-sink.md';
-      const text = await readFile(join(ROOT, normalize(file)), 'utf8');
+      const text = await readFile(projectPath(file), 'utf8');
       res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
       res.end(page(file, text, url.searchParams));
+      return;
+    }
+    if (url.pathname === '/raw') {
+      const text = await readFile(projectPath(url.searchParams.get('file') ?? ''), 'utf8');
+      res.writeHead(200, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end(text);
       return;
     }
     const rel = normalize(decodeURIComponent(url.pathname)).replace(/^[/\\]+/, '');
@@ -147,6 +219,6 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end('Not found');
   }
-}).listen(PORT, () => {
+}).listen(PORT, '127.0.0.1', () => {
   console.log(`ReadMeMaybe dev harness: http://localhost:${PORT}`);
 });
