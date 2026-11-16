@@ -32,7 +32,7 @@
     "readme preview"
   ],
   "galleryBanner": {
-    "color": "#2d2a3a",
+    "color": "#1b1726",
     "theme": "dark"
   },
   "main": "./dist/extension.js",
