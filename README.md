@@ -99,6 +99,22 @@ Yes. It's tested in VS Code 1.146 and Antigravity IDE 1.107, and installs from O
 **Is it safe to open files I didn't write?**
 Yes. Scripts in Markdown never run, HTML is sanitized, and links only open when you click them.
 
+## How to contribute
+
+Bug reports, ideas and pull requests are all welcome.
+
+- **Found a bug or have an idea?** [Open an issue](https://github.com/sachin-dahal/read-me-maybe/issues). A small Markdown snippet that shows the problem helps a lot.
+- **Want to send a fix?** Clone the repo and start the dev preview:
+
+  ```bash
+  git clone https://github.com/sachin-dahal/read-me-maybe.git
+  cd read-me-maybe
+  npm install
+  npm run dev   # live preview in your browser at http://localhost:5179
+  ```
+
+  Press <kbd>F5</kbd> in VS Code to try your changes in a new window with the example files open. Run `npm test` before opening a pull request, and keep the promise in mind: users install it and it just works, with no extra setup.
+
 ## License
 
 [MIT](LICENSE)
