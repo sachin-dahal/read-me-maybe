@@ -36,7 +36,7 @@ jobs:
       - run: npm run package
 
       - name: Publish to the VS Code Marketplace
-        run: npx vsce publish --oidc --packagePath *.vsix
+        run: npx vsce publish --oidc --packagePath *.vsix --skip-duplicate
 
       - name: Publish to Open VSX
         if: env.OVSX_PAT != ''
